@@ -3,6 +3,7 @@ module card-validator-apps-service
 go 1.23.2
 
 require (
+	github.com/go-playground/validator/v10 v10.22.1
 	github.com/golang/protobuf v1.5.4
 	github.com/mwinyimoha/card-validator-utils v0.0.0-20241007131956-99fc3d8a2dca
 	github.com/spf13/viper v1.19.0
@@ -15,9 +16,13 @@ require (
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
+	github.com/go-playground/locales v0.14.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.2 // indirect
+	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
