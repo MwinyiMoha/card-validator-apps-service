@@ -13,6 +13,7 @@ import (
 const appsCollection = "apps"
 
 type AppRepository interface {
+	Disconnect(ctx context.Context) error
 }
 
 type Repository struct {
