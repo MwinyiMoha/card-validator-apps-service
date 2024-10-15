@@ -5,6 +5,7 @@ go 1.23.2
 require (
 	github.com/go-playground/validator/v10 v10.22.1
 	github.com/golang/protobuf v1.5.4
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
 	github.com/mwinyimoha/card-validator-utils v0.0.0-20241007131956-99fc3d8a2dca
 	github.com/spf13/viper v1.19.0
 	go.mongodb.org/mongo-driver v1.17.1

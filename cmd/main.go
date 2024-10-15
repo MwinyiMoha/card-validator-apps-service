@@ -15,6 +15,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	grpclogging "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"github.com/mwinyimoha/card-validator-utils/logging"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -45,7 +47,12 @@ func main() {
 	svc := application.NewService(repo, val)
 	srv := api.NewServer(svc)
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(
+			grpclogging.UnaryServerInterceptor(api.InterceptorLogger(logger)),
+			recovery.UnaryServerInterceptor(),
+		),
+	)
 	protos.RegisterAppsServiceServer(s, srv)
 	reflection.Register(s)
 
