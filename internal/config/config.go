@@ -8,7 +8,7 @@ type Config struct {
 	ServerPort     int    `mapstructure:"SERVER_PORT"`
 	DefaultTimeout int    `mapstructure:"DEFAULT_TIMEOUT"`
 	DatabaseURL    string `mapstructure:"DATABASE_URL"`
-	DatabaseName   string `mapstructure:"DATABASAE_NAME"`
+	DatabaseName   string `mapstructure:"DATABASE_NAME"`
 }
 
 const configType = "env"
