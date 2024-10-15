@@ -21,11 +21,12 @@ type App struct {
 	Description string             `bson:"description"`
 	Environment string             `bson:"environment"`
 	OwnerType   string             `bson:"ownerType"`
+	AppKey      string             `bson:"appKey"`
 	CreatedAt   time.Time          `bson:"createdAt"`
 	LastUpdated time.Time          `bson:"lastUpdate"`
 }
 
-func NewApp(payload *AppPayload) *App {
+func NewApp(payload *AppPayload, appKey string) *App {
 	return &App{
 		ID:          primitive.NewObjectID(),
 		OwnerID:     payload.OwnerID,
@@ -33,6 +34,7 @@ func NewApp(payload *AppPayload) *App {
 		Description: payload.Description,
 		Environment: payload.Environment,
 		OwnerType:   payload.OwnerType,
+		AppKey:      appKey,
 		CreatedAt:   time.Now(),
 		LastUpdated: time.Now(),
 	}
