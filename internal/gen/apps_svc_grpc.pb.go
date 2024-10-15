@@ -35,7 +35,7 @@ type AppsServiceClient interface {
 	GetApps(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetAppsResponse, error)
 	GetApp(ctx context.Context, in *GetAppRequest, opts ...grpc.CallOption) (*App, error)
 	CreateApp(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*App, error)
-	RefreshAppKey(ctx context.Context, in *RefreshAppKeyRequest, opts ...grpc.CallOption) (*App, error)
+	RefreshAppKey(ctx context.Context, in *RefreshAppKeyRequest, opts ...grpc.CallOption) (*RefreshAppKeyResponse, error)
 	DecodeAppKey(ctx context.Context, in *DecodeAppKeyRequest, opts ...grpc.CallOption) (*DecodeAppKeyResponse, error)
 	DeleteApp(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
@@ -75,8 +75,8 @@ func (c *appsServiceClient) CreateApp(ctx context.Context, in *CreateAppRequest,
 	return out, nil
 }
 
-func (c *appsServiceClient) RefreshAppKey(ctx context.Context, in *RefreshAppKeyRequest, opts ...grpc.CallOption) (*App, error) {
-	out := new(App)
+func (c *appsServiceClient) RefreshAppKey(ctx context.Context, in *RefreshAppKeyRequest, opts ...grpc.CallOption) (*RefreshAppKeyResponse, error) {
+	out := new(RefreshAppKeyResponse)
 	err := c.cc.Invoke(ctx, AppsService_RefreshAppKey_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -109,7 +109,7 @@ type AppsServiceServer interface {
 	GetApps(context.Context, *empty.Empty) (*GetAppsResponse, error)
 	GetApp(context.Context, *GetAppRequest) (*App, error)
 	CreateApp(context.Context, *CreateAppRequest) (*App, error)
-	RefreshAppKey(context.Context, *RefreshAppKeyRequest) (*App, error)
+	RefreshAppKey(context.Context, *RefreshAppKeyRequest) (*RefreshAppKeyResponse, error)
 	DecodeAppKey(context.Context, *DecodeAppKeyRequest) (*DecodeAppKeyResponse, error)
 	DeleteApp(context.Context, *DeleteAppRequest) (*empty.Empty, error)
 	mustEmbedUnimplementedAppsServiceServer()
@@ -128,7 +128,7 @@ func (UnimplementedAppsServiceServer) GetApp(context.Context, *GetAppRequest) (*
 func (UnimplementedAppsServiceServer) CreateApp(context.Context, *CreateAppRequest) (*App, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateApp not implemented")
 }
-func (UnimplementedAppsServiceServer) RefreshAppKey(context.Context, *RefreshAppKeyRequest) (*App, error) {
+func (UnimplementedAppsServiceServer) RefreshAppKey(context.Context, *RefreshAppKeyRequest) (*RefreshAppKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefreshAppKey not implemented")
 }
 func (UnimplementedAppsServiceServer) DecodeAppKey(context.Context, *DecodeAppKeyRequest) (*DecodeAppKeyResponse, error) {
