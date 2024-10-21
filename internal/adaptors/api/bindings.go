@@ -3,8 +3,10 @@ package api
 import (
 	"card-validator-apps-service/internal/core/domain"
 	protos "card-validator-apps-service/internal/gen"
-	"fmt"
 
+	"github.com/mwinyimoha/card-validator-utils/errors"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -21,7 +23,19 @@ func MapDocToResponse(doc *domain.App) *protos.App {
 	}
 }
 
-func ParseError(err error) error {
-	fmt.Println(err)
-	return err
+func ParseError(err error) *status.Status {
+	if cerr, ok := err.(*errors.Error); ok {
+		return status.Convert(cerr)
+	}
+
+	if verr, ok := err.(*errors.ValidationError); ok {
+		st, err := verr.GRPCStatus()
+		if err != nil {
+			return status.New(codes.Internal, err.Error())
+		}
+
+		return st
+	}
+
+	return status.New(codes.Internal, err.Error())
 }

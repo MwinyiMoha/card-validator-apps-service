@@ -24,7 +24,7 @@ func NewServer(svc application.AppService) *Server {
 func (s *Server) GetApps(ctx context.Context, req *empty.Empty) (*protos.GetAppsResponse, error) {
 	docs, err := s.Service.ListApps("dummy")
 	if err != nil {
-		return nil, ParseError(err)
+		return nil, ParseError(err).Err()
 	}
 
 	var apps []*protos.App
@@ -38,7 +38,7 @@ func (s *Server) GetApps(ctx context.Context, req *empty.Empty) (*protos.GetApps
 func (s *Server) GetApp(ctx context.Context, req *protos.GetAppRequest) (*protos.App, error) {
 	app, err := s.Service.FetchApp("dummy", req.AppId)
 	if err != nil {
-		return nil, ParseError(err)
+		return nil, ParseError(err).Err()
 	}
 
 	return MapDocToResponse(app), nil
@@ -55,7 +55,7 @@ func (s *Server) CreateApp(ctx context.Context, req *protos.CreateAppRequest) (*
 
 	app, err := s.Service.CreateApp(payload)
 	if err != nil {
-		return nil, ParseError(err)
+		return nil, ParseError(err).Err()
 	}
 
 	return MapDocToResponse(app), nil
@@ -64,7 +64,7 @@ func (s *Server) CreateApp(ctx context.Context, req *protos.CreateAppRequest) (*
 func (s *Server) RefreshAppKey(ctx context.Context, req *protos.RefreshAppKeyRequest) (*protos.RefreshAppKeyResponse, error) {
 	newKey, err := s.Service.RefreshKey("dummy", req.AppId)
 	if err != nil {
-		return nil, ParseError(err)
+		return nil, ParseError(err).Err()
 	}
 
 	return &protos.RefreshAppKeyResponse{NewKey: newKey}, nil
@@ -73,7 +73,7 @@ func (s *Server) RefreshAppKey(ctx context.Context, req *protos.RefreshAppKeyReq
 func (s *Server) DecodeAppKey(ctx context.Context, req *protos.DecodeAppKeyRequest) (*protos.DecodeAppKeyResponse, error) {
 	appId, err := s.Service.DecodeKey(req.AppKey)
 	if err != nil {
-		return nil, ParseError(err)
+		return nil, ParseError(err).Err()
 	}
 
 	return &protos.DecodeAppKeyResponse{AppId: appId}, nil
@@ -81,7 +81,7 @@ func (s *Server) DecodeAppKey(ctx context.Context, req *protos.DecodeAppKeyReque
 
 func (s *Server) DeleteApp(ctx context.Context, req *protos.DeleteAppRequest) (*emptypb.Empty, error) {
 	if err := s.Service.DeleteApp("dummy", req.AppId); err != nil {
-		return nil, ParseError(err)
+		return nil, ParseError(err).Err()
 	}
 
 	return &emptypb.Empty{}, nil
