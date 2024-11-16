@@ -10,7 +10,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func MapDocToResponse(doc *domain.App) *protos.App {
+func appDocToProto(doc *domain.App) *protos.App {
 	return &protos.App{
 		Id:          doc.ID.Hex(),
 		Name:        doc.Name,
@@ -23,18 +23,13 @@ func MapDocToResponse(doc *domain.App) *protos.App {
 	}
 }
 
-func ParseError(err error) *status.Status {
+func parseError(err error) *status.Status {
 	if cerr, ok := err.(*errors.Error); ok {
 		return status.Convert(cerr)
 	}
 
 	if verr, ok := err.(*errors.ValidationError); ok {
-		st, err := verr.GRPCStatus()
-		if err != nil {
-			return status.New(codes.Internal, err.Error())
-		}
-
-		return st
+		return status.Convert(verr)
 	}
 
 	return status.New(codes.Internal, err.Error())

@@ -24,17 +24,17 @@ func NewServer(svc application.AppService) *Server {
 func (s *Server) GetApps(ctx context.Context, req *empty.Empty) (*protos.GetAppsResponse, error) {
 	userId, err := GetAuthUser(ctx)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	docs, err := s.Service.ListApps(userId)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	var apps []*protos.App
 	for _, doc := range docs {
-		apps = append(apps, MapDocToResponse(doc))
+		apps = append(apps, appDocToProto(doc))
 	}
 
 	return &protos.GetAppsResponse{Apps: apps}, nil
@@ -43,21 +43,21 @@ func (s *Server) GetApps(ctx context.Context, req *empty.Empty) (*protos.GetApps
 func (s *Server) GetApp(ctx context.Context, req *protos.GetAppRequest) (*protos.App, error) {
 	userId, err := GetAuthUser(ctx)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	app, err := s.Service.FetchApp(userId, req.AppId)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
-	return MapDocToResponse(app), nil
+	return appDocToProto(app), nil
 }
 
 func (s *Server) CreateApp(ctx context.Context, req *protos.CreateAppRequest) (*protos.App, error) {
 	userId, err := GetAuthUser(ctx)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	payload := &domain.AppPayload{
@@ -70,21 +70,21 @@ func (s *Server) CreateApp(ctx context.Context, req *protos.CreateAppRequest) (*
 
 	app, err := s.Service.CreateApp(payload)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
-	return MapDocToResponse(app), nil
+	return appDocToProto(app), nil
 }
 
 func (s *Server) RefreshAppKey(ctx context.Context, req *protos.RefreshAppKeyRequest) (*protos.RefreshAppKeyResponse, error) {
 	userId, err := GetAuthUser(ctx)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	newKey, err := s.Service.RefreshKey(userId, req.AppId)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	return &protos.RefreshAppKeyResponse{NewKey: newKey}, nil
@@ -93,7 +93,7 @@ func (s *Server) RefreshAppKey(ctx context.Context, req *protos.RefreshAppKeyReq
 func (s *Server) DecodeAppKey(ctx context.Context, req *protos.DecodeAppKeyRequest) (*protos.DecodeAppKeyResponse, error) {
 	appId, err := s.Service.DecodeKey(req.AppKey)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	return &protos.DecodeAppKeyResponse{AppId: appId}, nil
@@ -102,11 +102,11 @@ func (s *Server) DecodeAppKey(ctx context.Context, req *protos.DecodeAppKeyReque
 func (s *Server) DeleteApp(ctx context.Context, req *protos.DeleteAppRequest) (*emptypb.Empty, error) {
 	userId, err := GetAuthUser(ctx)
 	if err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	if err := s.Service.DeleteApp(userId, req.AppId); err != nil {
-		return nil, ParseError(err).Err()
+		return nil, parseError(err).Err()
 	}
 
 	return &emptypb.Empty{}, nil
