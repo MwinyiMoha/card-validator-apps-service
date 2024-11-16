@@ -17,7 +17,7 @@ func New() *validator.Validate {
 func ValidateEnv(fl validator.FieldLevel) bool {
 	return slices.Contains(
 		[]string{
-			"ENVIRONMENT_STAGING",
+			"ENVIRONMENT_SANDBOX",
 			"ENVIRONMENT_PRODUCTION",
 		},
 		fl.Field().String(),
