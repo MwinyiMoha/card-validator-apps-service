@@ -15,8 +15,10 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
 	grpclogging "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/selector"
 	"github.com/mwinyimoha/card-validator-utils/logging"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -50,6 +52,7 @@ func main() {
 	s := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
 			grpclogging.UnaryServerInterceptor(api.InterceptorLogger(logger)),
+			selector.UnaryServerInterceptor(auth.UnaryServerInterceptor(api.AuthFn), selector.MatchFunc(api.SkipAuth)),
 			recovery.UnaryServerInterceptor(),
 		),
 	)
